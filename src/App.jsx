@@ -1,5 +1,7 @@
 import { useState } from "react"
 import SearchForm from "./components/SearchForm"
+import ImageGrid from "./components/ImageGrid"
+import ImageModal from './components/ImageModal'
 
 function App() {
 
@@ -7,6 +9,8 @@ function App() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [selectedImage, setSelectedImage] = useState(null)
+
 
 
   // API Call ------------------------------------------------------
@@ -43,6 +47,16 @@ function App() {
     }
   }
 
+  // Handle image selection --------------------------------------
+  function handleSelectImage(item) {
+    setSelectedImage(item)
+  }
+
+  // Clears the selected image and closes the modal
+  function handleCloseModal() {
+    setSelectedImage(null)
+  }
+
 
   // Render the component -----------------------------------------------
   return (
@@ -61,9 +75,22 @@ function App() {
       <p>No images found. Please try a different search.</p>
       )}
 
-      {/* Results count */}
-      <p>Results found: {images.length}</p>
-    </div>
+      {/* Image grid - only renders when there are search results */}
+      {images.length > 0 && (
+        <ImageGrid
+        images={images}
+        onSelect={handleSelectImage}
+        />
+      )}
+
+      {/* Modal — only renders when an image is selected */}
+      {selectedImage && (
+        <ImageModal
+          item={selectedImage}
+          onClose={handleCloseModal}
+        />
+      )}
+      </div>
   )
 }
 
