@@ -1,4 +1,5 @@
 import { useState } from "react"
+import "./App.css"
 import SearchForm from "./components/SearchForm"
 import ImageGrid from "./components/ImageGrid"
 import ImageModal from './components/ImageModal'
@@ -14,7 +15,7 @@ function App() {
 
 
   // API Call ------------------------------------------------------
-  async function handleSearch({ query, startYear, endYear }) {
+  async function handleSearch(query, startYear, endYear) {
 
     // Reset state before new search
     setImages([])
@@ -26,25 +27,31 @@ function App() {
 
       const response = await fetch(url)
       
-      // Check if response is ok
+          // Handle specific HTTP error codes
+        if (response.status === 400) {
+        setError("Invalid search request. Please check your inputs and try again.");
+        return;
+      }
+      if (response.status === 404) {
+        setError("The search endpoint could not be found. Please try again later.");
+        return;
+      }
       if (!response.ok) {
-        throw new Error('Something went wrong with the request')
+        setError(`Something went wrong. Please try again. (Error ${response.status})`);
+        return;
       }
 
-      // Parse the JSON response and update the state with the images
-      const data = await response.json()
-      const items = data.collection.items
+      const data = await response.json();
+      const items = data.collection.items;
 
-      setImages(items)
+      setImages(items);
 
     } catch {
-      // Display error message if request fails
-      setError('Failed to fetch images. Please try again.')
-
+      setError("Network error. Please check your connection and try again.");
     } finally {
-      // turns off loading when request is complete
-      setLoading(false)
+      setLoading(false);
     }
+     
   }
 
   // Handle image selection --------------------------------------
@@ -60,7 +67,7 @@ function App() {
 
   // Render the component -----------------------------------------------
   return (
-    <div>
+    <div className="status-message">
       <h1>NASA Rover Explorer</h1>
       <SearchForm onSearch={handleSearch} />
 

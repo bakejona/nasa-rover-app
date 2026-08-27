@@ -5,8 +5,11 @@ function ImageCard ({ item, onSelect}) {
     const title = item.data[0]?.title
 
     return (
-        <div onClick={() => onSelect(item)}>
-             <img src={imageUrl} alt={title} />
+        <div className="image-card" onClick={() => onSelect(item)}>
+             <img src={imageUrl}
+                alt={title}
+                style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }}
+             />
             <p>{title}</p>
         </div>
     )

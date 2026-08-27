@@ -8,13 +8,13 @@ function ImageModal({ item, onClose }) {
 
     return (
         // Overlay - clicking the background closes the modal
-        <div onClick={onClose}>
+        <div className="modal-overlay" onClick={onClose}>
             
             {/* Modal container - stop click from accidentally closing overlay */}
-            <div onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
                 {/* Close button */}
-                <button onClick={onClose}>Close</button>
+                <button onClick={onClose}>X</button>
 
                 {/* Image and metadata */}
                 <img src={imageUrl} alt={title} />
